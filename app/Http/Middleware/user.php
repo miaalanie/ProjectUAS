@@ -7,7 +7,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Symfony\Component\HttpFoundation\Response;
 
-class dosen
+class user
 {
     /**
      * Handle an incoming request.
@@ -16,10 +16,9 @@ class dosen
      */
     public function handle(Request $request, Closure $next)
     {
-        if (Auth::check() && Auth::user()->role === 'dosen'){
+        if (Auth::check() && Auth::user()->role === 'user'){
             return $next($request);
         }
-
-        return redirect('/home')->with('error', 'Unauthorized access');
+        return redirect('/dashboard')->with('error', 'Unautharized access');
     }
 }

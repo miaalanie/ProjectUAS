@@ -16,12 +16,23 @@ class userSeeder extends Seeder
     public function run(): void
     {
         DB::table('users')->insert([
-           // Admin Akademik
+           // Admin 
             [
                 'name' => 'Maya Nurhaliza',
                 'email' => 'maya.admin@gmail.com',
                 'password' => Hash::make('12345678'),
                 'role' => 'admin',
+                'email_verified_at'=>now(),
+                'remember_token' => Str::random(10),
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+            [
+                'name' => 'Mia Adelia',
+                'email' => 'miaadeliaa27@gmail.com',
+                'password' => Hash::make('12345678'),
+                'role' => 'admin',
+                'email_verified_at'=>now(),
                 'remember_token' => Str::random(10),
                 'created_at' => now(),
                 'updated_at' => now(),
@@ -31,46 +42,51 @@ class userSeeder extends Seeder
                 'email' => 'rudi.admin@gmail.com',
                 'password' => Hash::make('12345678'),
                 'role' => 'admin',
+                'email_verified_at'=>now(),
                 'remember_token' => Str::random(10),
                 'created_at' => now(),
                 'updated_at' => now(),
             ],
 
-            // Dosen
+            // Pakar
             [
                 'name' => 'Budi Santoso',
-                'email' => 'budi.dosen@gmail.com',
+                'email' => 'budi.user@gmail.com',
                 'password' => Hash::make('12345678'),
-                'role' => 'dosen',
+                'role' => 'user',
+                'email_verified_at'=>now(),
                 'remember_token' => Str::random(10),
                 'created_at' => now(),
                 'updated_at' => now(),
             ],
             [
                 'name' => 'Siti Komariah',
-                'email' => 'siti.dosen@gmail.com',
+                'email' => 'siti.user@gmail.com',
                 'password' => Hash::make('12345678'),
-                'role' => 'dosen',
+                'role' => 'user',
+                'email_verified_at'=>now(),
                 'remember_token' => Str::random(10),
                 'created_at' => now(),
                 'updated_at' => now(),
             ],
 
-            // Mahasiswa
+            // User
             [
                 'name' => 'Rina Marlina',
-                'email' => 'rina.mahasiswa@gmail.com',
+                'email' => 'rina.user@gmail.com',
                 'password' => Hash::make('12345678'),
-                'role' => 'mahasiswa',
+                'role' => 'user',
+                'email_verified_at'=>now(),
                 'remember_token' => Str::random(10),
                 'created_at' => now(),
                 'updated_at' => now(),
             ],
             [
                 'name' => 'Dika Alfarizi',
-                'email' => 'dika.mahasiswa@gmail.com',
+                'email' => 'dika.user@gmail.com',
                 'password' => Hash::make('12345678'),
-                'role' => 'mahasiswa',
+                'role' => 'user',
+                'email_verified_at'=>now(),
                 'remember_token' => Str::random(10),
                 'created_at' => now(),
                 'updated_at' => now(),

@@ -28,7 +28,23 @@
     <div id="wrapper">
 
         <!-- Sidebar -->
-         @include('partials.sidebar')
+        @php
+            $role = Auth::check() ? Auth::user()->role : 'guest';
+        @endphp
+
+        @switch($role)
+            @case('admin')
+                @include('partials.sidebar-admin')
+                @break
+
+            @case('user')
+                @include('partials.sidebar-user')
+                @break
+            
+            @default
+                @include('partials.sidebar-guest')
+        @endswitch
+
         <!-- End of Sidebar -->
 
 
@@ -40,19 +56,11 @@
 
                 <!-- Topbar -->
                 @include('partials.navbar')
+                
 
                 <!-- Begin Page Content -->
                 <div class="container-fluid">
-
-                    <!-- Page Heading -->
-                    <div class="d-sm-flex align-items-center justify-content-between mb-4">
-                        <h1 class="h3 mb-0 text-gray-800">Dashboard</h1>
-                        <a href="#" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm"><i
-                                class="fas fa-download fa-sm text-white-50"></i> Generate Report</a>
-                    </div>
-
-                  
-
+                    @yield('content')
                 </div>
                 <!-- /.container-fluid -->
 
