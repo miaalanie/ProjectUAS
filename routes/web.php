@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AdminController;
+use App\Http\Controllers\GuestController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
@@ -30,6 +31,11 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
+ //GUEST
+    Route::get('/dashboard-guest', [GuestController::class, 'dashboard'])->name('guest.dashboard');
+    Route::get('/mulai-diagnosa', [GuestController::class, 'mulaiDiagnosa'])->name('guest.mulaiDiagnosa');
+    Route::get('/tentang', [GuestController::class, 'tentang'])->name('guest.tentang');
+    
  //USER
 Route::middleware(['auth', 'user'])->group(function () {
     Route::get('/dashboard-user', [UserController::class, 'dashboard'])->name('user.dashboard');

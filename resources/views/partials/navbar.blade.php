@@ -51,7 +51,7 @@
             @csrf
             <input type="hidden" name="email" value="guest@example.com">
             <input type="hidden" name="password" value="guestpassword">
-            <button type="submit" class="btn btn-sm btn-outline-primary" style="margin-top:8px;">Guest</button>
+            <!-- <button type="submit" class="btn btn-sm btn-outline-primary" style="margin-top:8px;">Guest</button> -->
         </form>
     </li>
     @endguest
@@ -130,7 +130,7 @@
                     </form>
 
             @else
-                <a class="dropdown-item" href="#">
+                <a class="dropdown-item" href="{{ route('login') }}">
                     <i class="fas fa-sign-in-alt fa-sm fa-fw mr-2 text-gray-400"></i>
                     Login
                 </a>

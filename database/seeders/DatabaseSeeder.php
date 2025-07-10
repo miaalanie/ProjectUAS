@@ -14,6 +14,9 @@ class DatabaseSeeder extends Seeder
     {
         $this->call([
             userSeeder::class,
+            moodSeeder::class,
+            snackSeeder::class,
+            moodSnackSeeder::class,
         ]);
 
         // \App\Models\User::factory(10)->create();

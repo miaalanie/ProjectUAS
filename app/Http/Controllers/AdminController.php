@@ -39,7 +39,7 @@ class AdminController extends Controller
     }
 
     public function frekuensiSnack() {
-        return view('admin.frekuensiSnack');
+        return view('admin.frekuensi');
     }
 
     public function laporanUser() {
