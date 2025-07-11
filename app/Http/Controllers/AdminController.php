@@ -4,8 +4,10 @@ namespace App\Http\Controllers;
 
 use App\Models\User;
 use App\Models\Snack;
+use App\Models\Mood;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 
 class AdminController extends Controller
@@ -77,6 +79,106 @@ class AdminController extends Controller
     {
         User::findOrFail($id)->delete();
         return redirect()->route('admin.pengguna')->with('success', 'Pengguna berhasil dihapus!');
+    }
+
+        // ======== LOG MOOD ========
+     public function logMood()
+{
+    // Ambil data mood per hari
+    $moodPerHari = Mood::select(DB::raw('DATE(created_at) as tanggal'), DB::raw('COUNT(*) as jumlah'))
+        ->groupBy('tanggal')
+        ->orderBy('tanggal', 'ASC')
+        ->get();
+
+    // Ambil data mood per minggu
+    $moodPerMinggu = Mood::select(DB::raw('YEARWEEK(created_at) as minggu'), DB::raw('COUNT(*) as jumlah'))
+        ->groupBy('minggu')
+        ->orderBy('minggu', 'ASC')
+        ->get();
+
+    // Ambil data mood per bulan
+    $moodPerBulan = Mood::select(DB::raw('DATE_FORMAT(created_at, "%Y-%m") as bulan'), DB::raw('COUNT(*) as jumlah'))
+        ->groupBy('bulan')
+        ->orderBy('bulan', 'ASC')
+        ->get();
+
+    return view('admin.logMood', compact('moodPerHari', 'moodPerMinggu', 'moodPerBulan'));
+}
+
+    // riwayat snack
+    public function riwayatSnack()
+{
+    // Data perhari
+    $harian = DB::table('riwayat_snacks')
+        ->select(DB::raw('DATE(created_at) as tanggal, COUNT(*) as jumlah'))
+        ->whereDate('created_at', today())
+        ->groupBy('tanggal')
+        ->get();
+
+    // Data perminggu
+    $mingguan = DB::table('riwayat_snacks')
+        ->select(DB::raw('WEEK(created_at) as minggu, COUNT(*) as jumlah'))
+        ->whereBetween('created_at', [now()->subWeek(), now()])
+        ->groupBy('minggu')
+        ->get();
+
+    // Data perbulan
+    $bulanan = DB::table('riwayat_snacks')
+        ->select(DB::raw('MONTH(created_at) as bulan, COUNT(*) as jumlah'))
+        ->whereYear('created_at', now()->year)
+        ->groupBy('bulan')
+        ->get();
+
+    return view('admin.riwayatSnack', compact('harian', 'mingguan', 'bulanan'));
+}
+
+    // statistik konsumsi
+    public function statistikKonsumsi()
+{
+    // Data per kategori per hari
+    $harian = DB::table('riwayat_snacks')
+        ->select(DB::raw('DATE(created_at) as tanggal, kategori, COUNT(*) as jumlah'))
+        ->join('snacks', 'riwayat_snacks.snack_id', '=', 'snacks.id')
+        ->groupBy('tanggal', 'kategori')
+        ->orderBy('tanggal')
+        ->get();
+
+    // Data per kategori per minggu
+    $mingguan = DB::table('riwayat_snacks')
+        ->select(DB::raw('YEARWEEK(created_at) as minggu, kategori, COUNT(*) as jumlah'))
+        ->join('snacks', 'riwayat_snacks.snack_id', '=', 'snacks.id')
+        ->groupBy('minggu', 'kategori')
+        ->orderBy('minggu')
+        ->get();
+
+    // Data per kategori per bulan
+    $bulanan = DB::table('riwayat_snacks')
+        ->select(DB::raw('DATE_FORMAT(created_at, "%Y-%m") as bulan, kategori, COUNT(*) as jumlah'))
+        ->join('snacks', 'riwayat_snacks.snack_id', '=', 'snacks.id')
+        ->groupBy('bulan', 'kategori')
+        ->orderBy('bulan')
+        ->get();
+
+    return view('admin.statistikKonsumsi', compact('harian', 'mingguan', 'bulanan'));
+}
+
+    // bad mood
+   public function badMood()
+{
+    $badMoodData = DB::table('moods')
+        ->select(DB::raw('DATE(created_at) as tanggal'), DB::raw('COUNT(*) as jumlah'))
+        ->where('status', 'bad') // pastikan kolom mood atau status bad mood
+        ->groupBy('tanggal')
+        ->orderBy('tanggal')
+        ->get();
+
+    return view('admin.badMood', compact('badMoodData'));
+}
+
+    // frekuensi snack
+    public function frekuensiSnack()
+    {
+        return view('admin.frekuensiSnack'); // konsisten dengan nama file
     }
 
     // ======== CRUD SNACK ========
