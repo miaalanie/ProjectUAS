@@ -3,7 +3,10 @@
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\GuestController;
 use App\Http\Controllers\ProfileController;
+<<<<<<< HEAD
 use App\Http\Controllers\PenggunaController;
+=======
+>>>>>>> 1e8443ca702f8db5d862ee7e03e81ec0c647b984
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 
@@ -53,6 +56,7 @@ Route::middleware(['auth', 'admin'])->group(function () {
     // Master Data
     Route::get('/pengguna', [AdminController::class, 'pengguna'])->name('admin.pengguna');
     Route::get('/snack', [AdminController::class, 'snack'])->name('admin.snack');
+<<<<<<< HEAD
     // Master Data Snack
     Route::get('/snack', [AdminController::class, 'snack'])->name('admin.snack');
     Route::get('/snack/tambah', [AdminController::class, 'tambahSnack'])->name('admin.snack.tambah');
@@ -61,6 +65,8 @@ Route::middleware(['auth', 'admin'])->group(function () {
     Route::put('/snack/{id}/update', [AdminController::class, 'updateSnack'])->name('admin.snack.update');
     Route::delete('/snack/{id}/hapus', [AdminController::class, 'hapusSnack'])->name('admin.snack.hapus');
 
+=======
+>>>>>>> 1e8443ca702f8db5d862ee7e03e81ec0c647b984
     Route::get('/rules', [AdminController::class, 'rules'])->name('admin.rules');
 
     // Transaksi
@@ -72,12 +78,16 @@ Route::middleware(['auth', 'admin'])->group(function () {
     Route::get('/bad-mood', [AdminController::class, 'badMood'])->name('admin.bad-mood');
     Route::get('/frekuensi-snack', [AdminController::class, 'frekuensiSnack'])->name('admin.frekuensi-snack');
 
+<<<<<<< HEAD
 
+=======
+>>>>>>> 1e8443ca702f8db5d862ee7e03e81ec0c647b984
     // Laporan
     Route::get('/laporan-user', [AdminController::class, 'laporanUser'])->name('admin.laporan-user');
     Route::get('/laporan-akumulasi', [AdminController::class, 'laporanAkumulasi'])->name('admin.laporan-akumulasi');
 });
 
+<<<<<<< HEAD
 // Tambah user
 Route::get('/admin/pengguna/tambah', [AdminController::class, 'tambah'])->name('admin.pengguna.tambah');
 Route::post('/admin/pengguna/tambah', [AdminController::class, 'simpan'])->name('admin.pengguna.simpan');
@@ -95,3 +105,7 @@ Route::delete('/admin/pengguna/{id}', [AdminController::class, 'hapus'])->name('
 
 
 require __DIR__.'/auth.php';
+=======
+
+require __DIR__.'/auth.php';
+>>>>>>> 1e8443ca702f8db5d862ee7e03e81ec0c647b984
