@@ -190,7 +190,7 @@ class AdminController extends Controller
 
     public function tambahSnack()
     {
-        return view('admin.tambahSnack');
+        return view('admin.snack_tambah');
     }
 
     public function simpanSnack(Request $request)
