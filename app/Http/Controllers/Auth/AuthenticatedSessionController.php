@@ -17,6 +17,9 @@ class AuthenticatedSessionController extends Controller
      */
     public function create(): View
     {
+         // Regenerate token agar CSRF-nya fresh
+        session()->regenerateToken();
+        
         return view('auth.login');
     }
 

@@ -69,7 +69,7 @@
                                             </div>
                                         </div>
                                         <div class="text-center mb-3">
-                                            <a href="#" class="btn btn-outline-secondary btn-user btn-block"
+                                            <a href="{{ route('guest.dashboard') }}" class="btn btn-outline-secondary btn-user btn-block"
                                                 style="font-size: 13px;">Continue as Guest</a>
                                         </div>
                                         <button type="submit" class="btn btn-primary btn-user btn-block">

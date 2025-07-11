@@ -7,46 +7,14 @@ use Illuminate\Http\Request;
 class GuestController extends Controller
 {
     public function dashboard() {
-        return view('admin.dashboard');
+        return view('guest.dashboard');
     }
 
-    public function pengguna() {
-        return view('admin.pengguna');
+    public function mulaiDiagnosa() {
+        return view('guest.mulaiDiagnosa');
     }
 
-    public function snack() {
-        return view('admin.snack');
-    }
-
-    public function rules() {
-        return view('admin.rules');
-    }
-
-    public function logMood() {
-        return view('admin.logMood');
-    }
-
-    public function riwayatSnack() {
-        return view('admin.riwayatSnack');
-    }
-
-    public function statistikKonsumsi() {
-        return view('admin.statistikKonsumsi');
-    }
-
-    public function badMood() {
-        return view('admin.badMood');
-    }
-
-    public function frekuensiSnack() {
-        return view('admin.frekuensiSnack');
-    }
-
-    public function laporanUser() {
-        return view('admin.laporanUser');
-    }
-
-    public function laporanAkumulasi() {
-        return view('admin.laporanAkumulasi');
+    public function tentang() {
+        return view('guest.tentang');
     }
 }
