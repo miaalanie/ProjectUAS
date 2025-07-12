@@ -2,7 +2,6 @@
 
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\GuestController;
-use App\Http\Controllers\ProfileControl;
 use App\Http\Controllers\PenggunaController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\UserController;
@@ -56,7 +55,7 @@ Route::middleware(['auth', 'admin'])->group(function () {
     Route::get('/snack', [AdminController::class, 'snack'])->name('admin.snack');
     // Master Data Snack
     Route::get('/snack', [AdminController::class, 'snack'])->name('admin.snack');
-    Route::get('/snack/tambah', [AdminController::class, 'tambahSnack'])->name('admin.snack.tambah');
+    Route::get('/snack/tambah', [AdminController::class, 'tambahSnack'])->name('admin.snack_tambah');
     Route::post('/snack/simpan', [AdminController::class, 'simpanSnack'])->name('admin.snack.simpan');
     Route::get('/snack/{id}/edit', [AdminController::class, 'editSnack'])->name('admin.snack.edit');
     Route::put('/snack/{id}/update', [AdminController::class, 'updateSnack'])->name('admin.snack.update');
@@ -89,5 +88,6 @@ Route::put('/admin/pengguna/{id}', [AdminController::class, 'update'])->name('ad
 
 // Hapus user
 Route::delete('/admin/pengguna/{id}', [AdminController::class, 'hapus'])->name('admin.pengguna.hapus');
+
 
 require __DIR__.'/auth.php';
