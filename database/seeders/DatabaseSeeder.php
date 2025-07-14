@@ -17,6 +17,8 @@ class DatabaseSeeder extends Seeder
             moodSeeder::class,
             snackSeeder::class,
             moodSnackSeeder::class,
+            HeartRateFuzzySeeder::class,
+            BodyTemperatureFuzzySeeder::class,
         ]);
 
         // \App\Models\User::factory(10)->create();

@@ -10,14 +10,18 @@ return new class extends Migration
      * Run the migrations.
      */
     public function up(): void
-    {
-        Schema::create('moods', function (Blueprint $table) {
+{
+    Schema::create('moods', function (Blueprint $table) {
         $table->id();
+        $table->integer('min'); // nilai minimum defuzzifikasi
+        $table->integer('max'); // nilai maksimum defuzzifikasi
         $table->string('jenis_mood');
         $table->text('keterangan'); // info 
         $table->timestamps();
         $table->softDeletes(); // untuk kolom deleted_at
     });
+
+
     }
 
     /**

@@ -15,6 +15,8 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * Class Mood
  * 
  * @property int $id
+ * @property int $min
+ * @property int $max
  * @property string $jenis_mood
  * @property string $keterangan
  * @property Carbon|null $created_at
@@ -31,7 +33,14 @@ class Mood extends Model
 	use SoftDeletes;
 	protected $table = 'moods';
 
+	protected $casts = [
+		'min' => 'int',
+		'max' => 'int'
+	];
+
 	protected $fillable = [
+		'min',
+		'max',
 		'jenis_mood',
 		'keterangan'
 	];
