@@ -35,7 +35,13 @@ Route::middleware('auth')->group(function () {
  //GUEST
     Route::get('/dashboard-guest', [GuestController::class, 'dashboard'])->name('guest.dashboard');
     Route::get('/mulai-diagnosa', [GuestController::class, 'mulaiDiagnosa'])->name('guest.mulaiDiagnosa');
+    Route::get('/guest-diagnosa', [GuestController::class, 'diagnosa'])->name('guest.diagnosa');
     Route::get('/tentang', [GuestController::class, 'tentang'])->name('guest.tentang');
+    Route::get('/guest-store', [GuestController::class, 'tentang'])->name('guest.store');
+    Route::get('/tampilan-suhu', [GuestController::class, 'suhu'])->name('guest.suhu');
+    Route::get('/tampilan-heart-rate', [GuestController::class, 'heartRate'])->name('guest.heartRate');
+    Route::get('/tampilan-mood', [GuestController::class, 'mood'])->name('guest.mood');
+    Route::get('/tampilan-snack', [GuestController::class, 'snack'])->name('guest.snack');
     
  //USER
 Route::middleware(['auth', 'user'])->group(function () {
