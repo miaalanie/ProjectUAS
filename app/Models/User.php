@@ -8,7 +8,11 @@ namespace App\Models;
 
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Collection;
+<<<<<<< HEAD
 use Illuminate\Foundation\Auth\User as Authenticatable;
+=======
+use Illuminate\Database\Eloquent\Model;
+>>>>>>> b1c08ebb95de43ab8a645a45119ceb8cfc37a380
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 /**
@@ -30,7 +34,11 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  *
  * @package App\Models
  */
+<<<<<<< HEAD
 class User extends Authenticatable // ✅ ganti Model -> Authenticatable
+=======
+class User extends Model
+>>>>>>> b1c08ebb95de43ab8a645a45119ceb8cfc37a380
 {
     use SoftDeletes;
 
