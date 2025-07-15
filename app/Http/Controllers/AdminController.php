@@ -9,6 +9,10 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
+use Maatwebsite\Excel\Facades\Excel;
+use App\Exports\UserExport;
+use Barryvdh\DomPDF\Facade\Pdf;
+
 
 class AdminController extends Controller
 {
@@ -165,9 +169,9 @@ class AdminController extends Controller
     // bad mood
    public function badMood()
 {
-    $badMoodData = DB::table('moods')
+    $badMoodData = DB::table('diagnoses')
         ->select(DB::raw('DATE(created_at) as tanggal'), DB::raw('COUNT(*) as jumlah'))
-        ->where('status', 'bad') // pastikan kolom mood atau status bad mood
+        ->where('mood_id', '4') // pastikan kolom mood atau status bad mood
         ->groupBy('tanggal')
         ->orderBy('tanggal')
         ->get();
@@ -177,9 +181,18 @@ class AdminController extends Controller
 
     // frekuensi snack
     public function frekuensiSnack()
-    {
-        return view('admin.frekuensiSnack'); // konsisten dengan nama file
-    }
+{
+    $topSnacks = DB::table('diagnoses')
+        ->join('snacks', 'diagnoses.snack_id', '=', 'snacks.id')
+        ->select('snacks.nama_snack', DB::raw('COUNT(*) as jumlah'))
+        ->groupBy('diagnoses.snack_id', 'snacks.nama_snack')
+        ->orderByDesc('jumlah')
+        ->limit(10) // ambil top 10 snack paling sering dikonsumsi
+        ->get();
+
+    return view('admin.frekuensi', compact('topSnacks'));
+}
+
 
     // ======== CRUD SNACK ========
     public function snack()
@@ -257,4 +270,69 @@ class AdminController extends Controller
 
         return redirect()->route('admin.snack')->with('success', 'Snack berhasil dihapus!');
     }
+
+    
+
+     public function laporanUser()
+{
+    $daftarPengguna = User::all();
+    return view('admin.laporanUser', compact('daftarPengguna'));
+}
+
+
+   public function laporanAkumulasi()
+{
+    // Total data yang ada (ambil dari tabel yang memang ada)
+    $totalUsers = \App\Models\User::count();
+    $totalSnacks = \App\Models\Snack::count();
+    $periode = '01-01-2025 s/d 31-12-2025';
+
+    // Data dummy snack
+    $akumulasiSnack = [
+        ['nama' => 'Cokelat', 'total_konsumsi' => 350, 'pengguna_terbanyak' => 'Siti Aulia'],
+        ['nama' => 'Keripik Pedas', 'total_konsumsi' => 220, 'pengguna_terbanyak' => 'Budi Santoso'],
+        ['nama' => 'Permen Mint', 'total_konsumsi' => 180, 'pengguna_terbanyak' => 'Rina Kartika']
+    ];
+
+    // Data dummy chart
+    $snackChart = [
+        'labels' => ['Jan', 'Feb', 'Mar', 'Apr', 'Mei', 'Jun'],
+        'data' => [50, 75, 120, 90, 130, 100]
+    ];
+
+    $moodChart = [
+        'labels' => ['Senang', 'Sedih', 'Marah', 'Bingung'],
+        'data' => [120, 45, 30, 60]
+    ];
+
+    return view('admin.laporanAkumulasi', compact(
+        'totalUsers',
+        'totalSnacks',
+        'periode',
+        'akumulasiSnack',
+        'snackChart',
+        'moodChart'
+    ));
+}
+
+
+    // Export data user ke Excel
+public function exportUserExcel()
+{
+    return Excel::download(new UserExport, 'daftar_pengguna.xlsx');
+}
+
+// Export data user ke PDF
+public function exportUserPDF()
+{
+    $users = User::all();
+    $pdf = Pdf::loadView('admin.exports.users_pdf', compact('users'))
+              ->setPaper('a4', 'portrait');
+    return $pdf->download('daftar_pengguna.pdf');
+}
+
+
+
+
+
 }

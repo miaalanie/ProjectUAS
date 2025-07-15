@@ -82,6 +82,9 @@ Route::middleware(['auth', 'admin'])->group(function () {
     // Laporan
     Route::get('/laporan-user', [AdminController::class, 'laporanUser'])->name('admin.laporan-user');
     Route::get('/laporan-akumulasi', [AdminController::class, 'laporanAkumulasi'])->name('admin.laporan-akumulasi');
+    Route::get('/admin/pengguna/export/excel', [AdminController::class, 'exportUserExcel'])->name('admin.pengguna.export.excel');
+    Route::get('/admin/pengguna/export/pdf', [AdminController::class, 'exportUserPDF'])->name('admin.pengguna.export.pdf');
+
 });
 
 // Tambah user

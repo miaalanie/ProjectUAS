@@ -5,9 +5,22 @@
 <div class="container-fluid mt-4">
     <div class="d-flex justify-content-between align-items-center mb-4">
         <h1 class="h3 mb-0 text-gray-800">Daftar Pengguna</h1>
-        <a href="{{ route('admin.pengguna.tambah') }}" class="btn btn-success">
-            <i class="fas fa-user-plus mr-1"></i> Tambah Pengguna
-        </a>
+        <div class="d-flex">
+            {{-- Tombol Export Excel --}}
+            <a href="{{ route('admin.pengguna.export.excel') }}" class="btn btn-success mr-2">
+                <i class="fas fa-file-excel mr-1"></i> Export Excel
+            </a>
+
+            {{-- Tombol Export PDF --}}
+            <a href="{{ route('admin.pengguna.export.pdf') }}" class="btn btn-danger mr-2">
+                <i class="fas fa-file-pdf mr-1"></i> Export PDF
+            </a>
+
+            {{-- Tombol Tambah User --}}
+            <a href="{{ route('admin.pengguna.tambah') }}" class="btn btn-primary">
+                <i class="fas fa-user-plus mr-1"></i> Tambah Pengguna
+            </a>
+        </div>
     </div>
 
     @if (session('success'))
