@@ -15,18 +15,18 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * 
  * @property int $id
  * @property int $user_id
- * @property int $sensor_reading_id
+ * @property float $suhu
+ * @property float $detak_jantung
  * @property float $hasil_fuzzy
- * @property int $mood_id
+ * @property string $mood
  * @property int|null $snack_id
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
  * @property string|null $deleted_at
  * 
  * @property Mood $mood
- * @property SensorReading $sensor_reading
  * @property Snack|null $snack
- * @property User $user
+ * @property Guest $user
  *
  * @package App\Models
  */
@@ -37,37 +37,31 @@ class Diagnosis extends Model
 
 	protected $casts = [
 		'user_id' => 'int',
-		'sensor_reading_id' => 'int',
+		'suhu' => 'float',
+		'detak_jantung' => 'float',
 		'hasil_fuzzy' => 'float',
-		'mood_id' => 'int',
+		'mood' => 'string',
 		'snack_id' => 'int'
 	];
 
 	protected $fillable = [
 		'user_id',
-		'sensor_reading_id',
+		'suhu',
+		'detak_jantung',
 		'hasil_fuzzy',
-		'mood_id',
+		'mood',
 		'snack_id'
 	];
 
-	public function mood()
-	{
-		return $this->belongsTo(Mood::class);
-	}
+	
+	   public function snack()
+	   {
+			   return $this->belongsTo(Snack::class);
+	   }
 
-	public function sensor_reading()
-	{
-		return $this->belongsTo(SensorReading::class);
-	}
-
-	public function snack()
-	{
-		return $this->belongsTo(Snack::class);
-	}
-
-	public function user()
-	{
-		return $this->belongsTo(User::class);
-	}
+	   // Relasi ke Guest (bukan User), sesuai migration foreign key
+	   public function guest()
+	   {
+			   return $this->belongsTo(Guest::class, 'user_id');
+	   }
 }

@@ -1,138 +1,193 @@
-// #include <ESP8266WiFi.h>
-// #include <ESP8266HTTPClient.h>
-// #include <WiFiClient.h>
-// #include <Adafruit_MLX90640.h>
+#include <Wire.h>                // Buat komunikasi I2C (MLX)
+#include <Adafruit_MLX90614.h>  // Buat sensor suhu
+#include <PulseSensorPlayground.h>  // Buat sensor detak jantung
 
-// const char* ssid = "mia";
-// const char* password = "gaadapassword";
+Adafruit_MLX90614 mlx = Adafruit_MLX90614();
+PulseSensorPlayground pulseSensor;
 
-// const char* serverName = "http://192.168.43.251:8000/api/sensor-readings"; // Laravel API
-// const int pulsePin = 34; // analog pin untuk pulse (A0 di ESP32)
-
-// Adafruit_MLX90640 mlx;
-
-// void setup() {
-//   Serial.begin(115200);
-
-//   WiFi.begin(ssid, password);
-//   while (WiFi.status() != WL_CONNECTED) {
-//     delay(500);
-//     Serial.print(".");
-//   }
-//   Serial.println("WiFi Connected");
-
-//   Wire.begin();
-//   if (!mlx.begin()) {
-//     Serial.println("MLX90640 not found!");
-//     while (1);
-//   }
-//   mlx.setMode(MLX90640_CHESS);
-//   mlx.setResolution(MLX90640_ADC_18BIT);
-//   mlx.setRefreshRate(MLX90640_4_HZ);
-// }
-
-// void loop() {
-//   // 1. Baca suhu dari MLX90641
-//   float frame[32 * 24]; // 768
-//   float suhu = 0;
-//   if (mlx.getFrame(frame) != 0) {
-//     Serial.println("Failed to read from MLX90641");
-//   } else {
-//     float total = 0;
-//     for (int i = 0; i < 768; i++) {
-//       total += frame[i];
-//     }
-//     suhu = total / 768.0; // ambil rata-rata suhu seluruh area
-//   }
-
-//   // 2. Baca detak jantung dari pulse sensor analog
-//   int detakAnalog = analogRead(pulsePin);
-//   int detak_jantung = map(detakAnalog, 0, 4095, 60, 120); // kira2 konversi ke bpm kasar
-
-//   Serial.print("Suhu: "); Serial.print(suhu);
-//   Serial.print(" | Detak: "); Serial.println(detak_jantung);
-
-//   // 3. Kirim ke Laravel API
-//   if (WiFi.status() == WL_CONNECTED) {
-//     HTTPClient http;
-//     http.begin(serverName);
-//     http.addHeader("Content-Type", "application/json");
-
-//     String jsonData = "{\"user_id\":1, \"suhu\":" + String(suhu, 2) + ", \"detak_jantung\":" + String(detak_jantung) + "}";
-//     int httpResponseCode = http.POST(jsonData);
-
-//     Serial.print("Response Code: ");
-//     Serial.println(httpResponseCode);
-//     if (httpResponseCode > 0) {
-//       String response = http.getString();
-//       Serial.println(response);
-//     }
-
-//     http.end();
-//   }
-
-//   delay(10000); // kirim setiap 10 detik
-// }
-
-#include <ESP8266WiFi.h>
-#include <ESP8266HTTPClient.h>
-#include <WiFiClient.h>
-
-const char* ssid = "mia";
-const char* password = "gadaadapassword";
-
-const int potPin = A0;      // Simulasi suhu
-const int pulsePin = D1;    // Simulasi detak jantung
-
-const char* serverUrl = "http://192.168.43.251:8000/api/sensor-readings";
+const int PulsePin = A0;  // Pin analog buat pulse sensor
+int BPM;
 
 void setup() {
-  Serial.begin(115200);
-  WiFi.begin(ssid, password);
+  Serial.begin(9600);
   
+  // Inisialisasi sensor suhu
+  mlx.begin();
+  
+  // Konfigurasi pulse sensor
+  pulseSensor.analogInput(PulsePin);
+  pulseSensor.setThreshold(550);
+  pulseSensor.begin();
+}
+
+void loop() {
+  // Baca suhu
+  float suhuTubuh = mlx.readObjectTempC();
+  Serial.print("Suhu Tubuh: ");
+  Serial.print(suhuTubuh);
+  Serial.println(" °C");
+
+  // Baca detak jantung
+  if (pulseSensor.sawStartOfBeat()) {
+    BPM = pulseSensor.getBeatsPerMinute();
+
+    // Tampilkan di Serial Monitor
+    Serial.print("❤️ Detak Jantung: ");
+    Serial.print(BPM);
+    Serial.println(" BPM");
+  }
+
+  
+
+  delay(500);  // jeda biar bacaan gak terlalu cepat
+}
+
+
+
+// =====================
+#include <ESP8266WiFi.h>
+#include <ESP8266HTTPClient.h>
+#include <WiFiClient.h> 
+#include <Wire.h>
+#include <Adafruit_MLX90614.h>
+#include <PulseSensorPlayground.h>
+
+const char* ssid = "cipp";
+const char* password = "12345678";
+
+Adafruit_MLX90614 mlx = Adafruit_MLX90614();
+PulseSensorPlayground pulseSensor;
+
+const int PulsePin = A0;
+int BPM = 0;
+
+const char* serverUrl = "http://10.157.33.251:8080/api/sensor-readings";
+
+void setup() {
+  Serial.begin(9600);
+  WiFi.begin(ssid, password);
   while (WiFi.status() != WL_CONNECTED) {
     delay(500);
     Serial.print(".");
   }
-  Serial.println("");
-  Serial.println("WiFi connected");
+  Serial.println("\nWiFi connected");
+
+  Wire.begin(D2, D1);  // <- WAJIB untuk MLX90614
+  if (!mlx.begin()) {
+    Serial.println("❌ Gagal inisialisasi MLX90614!");
+    while (true);
+  }
+
+  pulseSensor.analogInput(PulsePin);
+  pulseSensor.setThreshold(550);
+  pulseSensor.begin();
 }
 
+
 void loop() {
-  if (WiFi.status() == WL_CONNECTED) {
-    int potValue = analogRead(potPin);
-    float suhu = map(potValue, 0, 1023, 30, 42);  // konversi nilai ke suhu
+  float suhuTubuh = mlx.readObjectTempC();
 
-    int pulseValue = analogRead(pulsePin);
-    int detak = map(pulseValue, 0, 1023, 60, 120); // konversi ke bpm
+  if (pulseSensor.sawStartOfBeat()) {
+    BPM = pulseSensor.getBeatsPerMinute();
+    Serial.print("❤️ BPM: ");
+    Serial.println(BPM);
+  }
 
-    Serial.print("Suhu: "); Serial.print(suhu);
-    Serial.print(" | Detak: "); Serial.println(detak);
+  Serial.print("🌡️ Suhu: ");
+  Serial.println(suhuTubuh);
 
+  if (WiFi.status() == WL_CONNECTED && BPM > 30) {
     WiFiClient client;
     HTTPClient http;
 
     http.begin(client, serverUrl);
+    http.setTimeout(2000);
     http.addHeader("Content-Type", "application/json");
-    http.addHeader("Accept", "application/json");
 
-    // Buat format JSON yang sesuai dengan Laravel
-    String httpRequestData = "{\"user_id\":1, \"suhu\":" + String(suhu, 2) +
-                             ", \"detak_jantung\":" + String(detak) + "}";
-
-    int httpResponseCode = http.POST(httpRequestData);
+    String postData = "{\"suhu\": " + String(suhuTubuh, 2) + ", \"detak_jantung\": " + String(BPM) + "}";
+    int httpResponseCode = http.POST(postData);
 
     if (httpResponseCode > 0) {
       String response = http.getString();
-      Serial.println(httpResponseCode);
-      Serial.println(response);
+      Serial.println("✅ Response: " + response);
     } else {
-      Serial.print("Error on sending POST: ");
-      Serial.println(httpResponseCode);
+      Serial.println("❌ Gagal kirim data. Code: " + String(httpResponseCode));
     }
 
     http.end();
   }
 
-  delay(5000); // kirim tiap 5 detik
+  delay(3000);
+}
+
+
+//------------------------------------
+#include <ESP8266WiFi.h>
+#include <ESP8266WebServer.h> // Untuk bikin web server kecil
+
+const char* ssid = "Wildan";
+const char* password = "12345678";
+
+// Gunakan WebServer di port 80 (default HTTP)
+ESP8266WebServer server(80);
+
+// Pin D1–D8, sesuai urutan LED
+int ledPins[] = {D1, D2, D3, D4, D5, D6, D7, D8};
+const int jumlahLED = 8;
+
+void setup() {
+  Serial.begin(115200);
+
+  // Inisialisasi semua pin LED sebagai output
+  for (int i = 0; i < jumlahLED; i++) {
+    pinMode(ledPins[i], OUTPUT);
+    digitalWrite(ledPins[i], LOW); // Semua LED mati dulu
+  }
+
+  // Connect ke WiFi
+  WiFi.begin(ssid, password);
+  Serial.print("Menghubungkan ke WiFi");
+  while (WiFi.status() != WL_CONNECTED) {
+    delay(500);
+    Serial.print(".");
+  }
+
+  Serial.println("\nWiFi terhubung!");
+  Serial.print("IP Address: ");
+  Serial.println(WiFi.localIP());  // <<< CATAT IP INI BUAT AKSES DARI FRONTEND
+
+  // Handle request ke /led?id=...
+  server.on("/led", handleLedRequest);
+
+  server.begin();
+  Serial.println("Server dimulai...");
+}
+
+void loop() {
+  server.handleClient(); // Tunggu request dari browser/frontend
+}
+
+void handleLedRequest() {
+  // Cek apakah ada parameter ?id=...
+  if (server.hasArg("id")) {
+    int id = server.arg("id").toInt();
+
+    // Reset semua LED
+    for (int i = 0; i < jumlahLED; i++) {
+      digitalWrite(ledPins[i], LOW);
+    }
+
+    // Nyalakan LED sesuai ID
+    if (id >= 1 && id <= jumlahLED) {
+      digitalWrite(ledPins[id - 1], HIGH); // index dimulai dari 0
+      Serial.print("LED ID ");
+      Serial.print(id);
+      Serial.println(" dinyalakan!");
+      server.send(200, "text/plain", "LED dinyalakan!");
+    } else {
+      server.send(400, "text/plain", "ID tidak valid (1–8)");
+    }
+  } else {
+    server.send(400, "text/plain", "Parameter 'id' tidak ditemukan");
+  }
 }

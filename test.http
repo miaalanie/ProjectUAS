@@ -1,0 +1,37 @@
+### Coba kirim data suhu & detak ke proses-mood
+POST http://localhost:8000/proses-mood
+Content-Type: application/json
+
+{
+  "suhu": 36.8,
+  "detak": 89
+}
+
+### Coba kirim data suhu & detak ke proses-mood
+POST http://10.152.192.251:8000/sensor-readings
+Content-Type: application/json
+
+{
+  "suhu": 36.8,
+  "detak": 89
+}
+
+
+### 
+GET http://localhost:8000/get-snack/Calm
+
+
+
+### 
+POST http://localhost:8000/diagnoses
+Content-Type: application/json
+Accept: application/json
+
+{
+  "user_id": 1,
+  "suhu": 36.8,
+  "detak_jantung": 89,
+  "hasil_fuzzy": 63.33,
+  "mood": "anxious",
+  "snack_id": 7
+}

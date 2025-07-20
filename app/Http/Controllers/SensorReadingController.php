@@ -14,7 +14,6 @@ class SensorReadingController extends Controller
     public function store(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            'user_id' => 'required|exists:users,id',
             'suhu' => 'required|numeric|between:20,45',
             'detak_jantung' => 'required|integer|between:30,180',
         ]);
@@ -28,7 +27,6 @@ class SensorReadingController extends Controller
 
         // Simpan data sensor
         $reading = SensorReading::create([
-            'user_id' => $request->user_id,
             'suhu' => $request->suhu,
             'detak_jantung' => $request->detak_jantung,
             'recorded_at' => now(), // pakai waktu sekarang
@@ -41,19 +39,35 @@ class SensorReadingController extends Controller
         ], 201);
     }
 
+    public function store2(Request $request)
+    {
+        $data = $request->validate([
+            'suhu' => 'numeric|between:20,50',
+            'detak_jantung' => 'integer|between:30,250',
+        ]);
+
+        $sensorData = SensorReading::create($data + ['recorded_at' => now()]);
+
+        return response()->json([
+            'status' => 'success',
+            'data' => $sensorData
+        ], 201);
+    }
+
+
     /**
      * Ambil 50 data terbaru sensor (GET /api/sensor-readings)
      */
-    public function index()
-    {
-        $readings = SensorReading::with('user')
-            ->latest('recorded_at')
-            ->take(50)
-            ->get();
+   public function index()
+{
+    $readings = SensorReading::latest('recorded_at')
+        ->take(50)
+        ->get();
 
-        return response()->json([
-            'success' => true,
-            'data' => $readings
-        ]);
-    }
+    return response()->json([
+        'success' => true,
+        'data' => $readings
+    ]);
+}
+    
 }

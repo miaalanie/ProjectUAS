@@ -11,23 +11,18 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('sensor_readings', function (Blueprint $table) {
+        Schema::create('guests', function (Blueprint $table) {
             $table->id();
-            $table->decimal('suhu', 5, 2); // contoh: 36.75
-            $table->integer('detak_jantung'); // contoh: 80
-            $table->timestamp('recorded_at')->useCurrent(); // default: waktu sekarang
+            $table->string('name');
             $table->timestamps();
-            $table->softDeletes();
-
         });
     }
-
 
     /**
      * Reverse the migrations.
      */
     public function down(): void
     {
-        //
+        Schema::dropIfExists('guests');
     }
 };

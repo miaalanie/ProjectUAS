@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Guest;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 
 class GuestController extends Controller
 {
@@ -43,4 +45,38 @@ class GuestController extends Controller
         }])->get();
         return view('guest.snack', compact('moods'));
     }
+
+    // ------------------- LOGIC -------------------
+    public function store(Request $request)
+{
+    $request->validate([
+        'nama' => 'required|string|max:255',
+    ]);
+
+    $guest = \App\Models\Guest::create([
+        'name' => $request->nama,
+    ]);
+
+    return response()->json(['id' => $guest->id]);
+}
+
+public function storeDiagnose(Request $request)
+{
+    Log::info('DIAGNOSIS POST DATA:', $request->all());
+
+    $validated = $request->validate([
+        'user_id' => 'required|integer',
+        'suhu' => 'required|numeric',
+        'detak_jantung' => 'required|numeric',
+        'hasil_fuzzy' => 'required|numeric',
+        'mood' => 'required|string', // ✅ ubah dari mood_id jadi mood
+        'snack_id' => 'required|integer',
+    ]);
+
+    $diagnosis = \App\Models\Diagnosis::create($validated);
+
+    return response()->json(['success' => true, 'diagnosis' => $diagnosis]);
+}
+
+
 }

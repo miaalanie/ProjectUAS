@@ -9,6 +9,7 @@ namespace App\Models;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 /**
@@ -26,11 +27,10 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @property string|null $deleted_at
  * 
  * @property Collection|Diagnosis[] $diagnoses
- * @property Collection|SensorReading[] $sensor_readings
  *
  * @package App\Models
  */
-class User extends Model
+class User extends Authenticatable
 {
 	use SoftDeletes;
 	protected $table = 'users';
@@ -56,10 +56,5 @@ class User extends Model
 	public function diagnoses()
 	{
 		return $this->hasMany(Diagnosis::class);
-	}
-
-	public function sensor_readings()
-	{
-		return $this->hasMany(SensorReading::class);
 	}
 }

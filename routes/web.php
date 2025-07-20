@@ -2,9 +2,12 @@
 
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\GuestController;
+use App\Http\Controllers\MoodController;
 use App\Http\Controllers\PenggunaController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\SnackRekomendasiController;
 use App\Http\Controllers\UserController;
+use Database\Seeders\SnackSeeder;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -42,7 +45,15 @@ Route::middleware('auth')->group(function () {
     Route::get('/tampilan-heart-rate', [GuestController::class, 'heartRate'])->name('guest.heartRate');
     Route::get('/tampilan-mood', [GuestController::class, 'mood'])->name('guest.mood');
     Route::get('/tampilan-snack', [GuestController::class, 'snack'])->name('guest.snack');
-    
+   
+// SAAT DIAGNOSA
+    Route::post('/guests', [GuestController::class, 'store']);
+    // routes/web.php atau api.php
+    Route::post('/proses-mood', [MoodController::class, 'processMood']);
+    // Route untuk mendapatkan data snack berdasarkan jenis_mood
+    Route::get('/get-snack/{jenis_mood}', [SnackRekomendasiController::class, 'getSnack']);
+    Route::post('/diagnoses', [GuestController::class, 'storeDiagnose']);
+
  //USER
 Route::middleware(['auth', 'user'])->group(function () {
     Route::get('/dashboard-user', [UserController::class, 'dashboard'])->name('user.dashboard');
