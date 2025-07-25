@@ -29,6 +29,8 @@ class SensorReading extends Model
 	protected $table = 'sensor_readings';
 
 	protected $casts = [
+		'suhu' => 'float',
+		'detak_jantung' => 'int',
 		'recorded_at' => 'datetime'
 	];
 
@@ -37,6 +39,4 @@ class SensorReading extends Model
 		'detak_jantung',
 		'recorded_at'
 	];
-
-	
 }

@@ -16,5 +16,7 @@ class VerifyCsrfToken extends Middleware
         '/get-snack',
         'api/sensor-readings',
         '/diagnoses',
+        '/summary/{user_id}',
+        '/send-summary-email',
     ];
 }

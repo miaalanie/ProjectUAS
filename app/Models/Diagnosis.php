@@ -24,9 +24,8 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @property Carbon|null $updated_at
  * @property string|null $deleted_at
  * 
- * @property Mood $mood
  * @property Snack|null $snack
- * @property Guest $user
+ * @property Guest $guest
  *
  * @package App\Models
  */
@@ -40,7 +39,6 @@ class Diagnosis extends Model
 		'suhu' => 'float',
 		'detak_jantung' => 'float',
 		'hasil_fuzzy' => 'float',
-		'mood' => 'string',
 		'snack_id' => 'int'
 	];
 
@@ -53,15 +51,14 @@ class Diagnosis extends Model
 		'snack_id'
 	];
 
-	
-	   public function snack()
-	   {
-			   return $this->belongsTo(Snack::class);
-	   }
 
-	   // Relasi ke Guest (bukan User), sesuai migration foreign key
-	   public function guest()
-	   {
-			   return $this->belongsTo(Guest::class, 'user_id');
-	   }
+	public function snack()
+	{
+		return $this->belongsTo(Snack::class);
+	}
+
+	public function guest()
+	{
+		return $this->belongsTo(Guest::class, 'user_id');
+	}
 }

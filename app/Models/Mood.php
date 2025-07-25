@@ -23,7 +23,6 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @property Carbon|null $updated_at
  * @property string|null $deleted_at
  * 
- * @property Collection|Diagnosis[] $diagnoses
  * @property Collection|Snack[] $snacks
  *
  * @package App\Models
@@ -44,11 +43,6 @@ class Mood extends Model
 		'jenis_mood',
 		'keterangan'
 	];
-
-	public function diagnoses()
-	{
-		return $this->hasMany(Diagnosis::class);
-	}
 
 	public function snacks()
 	{

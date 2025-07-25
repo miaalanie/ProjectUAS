@@ -1,36 +1,37 @@
 <?php
 
+/**
+ * Created by Reliese Model.
+ */
+
 namespace App\Models;
 
+use Carbon\Carbon;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\SoftDeletes;
-use Illuminate\Support\Carbon;
 
+/**
+ * Class Guest
+ * 
+ * @property int $id
+ * @property string $name
+ * @property Carbon|null $created_at
+ * @property Carbon|null $updated_at
+ * 
+ * @property Collection|Diagnosis[] $diagnoses
+ *
+ * @package App\Models
+ */
 class Guest extends Model
 {
-    use SoftDeletes;
+	protected $table = 'guests';
 
-    protected $table = 'guests';
+	protected $fillable = [
+		'name'
+	];
 
-    protected $fillable = [
-        'name',
-        // tambahkan field lain jika diperlukan, misal: 'email', 'gender', 'age'
-    ];
-
-    /**
-     * Relasi: Guest hasMany Diagnosis
-     * Pastikan foreign key di tabel diagnoses adalah guest_id
-     */
-    public function diagnoses()
-    {
-        return $this->hasMany(Diagnosis::class, 'guest_id');
-    }
-
-    /**
-     * @property int $id
-     * @property string $name
-     * @property Carbon|null $created_at
-     * @property Carbon|null $updated_at
-     * @property Carbon|null $deleted_at
-     */
+	public function diagnoses()
+	{
+		return $this->hasMany(Diagnosis::class, 'user_id');
+	}
 }

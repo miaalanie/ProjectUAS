@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AdminController;
+use App\Http\Controllers\diagnosaController;
 use App\Http\Controllers\GuestController;
 use App\Http\Controllers\MoodController;
 use App\Http\Controllers\PenggunaController;
@@ -45,6 +46,10 @@ Route::middleware('auth')->group(function () {
     Route::get('/tampilan-heart-rate', [GuestController::class, 'heartRate'])->name('guest.heartRate');
     Route::get('/tampilan-mood', [GuestController::class, 'mood'])->name('guest.mood');
     Route::get('/tampilan-snack', [GuestController::class, 'snack'])->name('guest.snack');
+    Route::get('/summary/{user_id}', [DiagnosaController::class, 'summary'])->name('guest.summary');
+    Route::post('/send-summary-email', [DiagnosaController::class, 'sendEmail'])->name('summary.sendEmail');
+
+
    
 // SAAT DIAGNOSA
     Route::post('/guests', [GuestController::class, 'store']);
@@ -61,6 +66,7 @@ Route::middleware(['auth', 'user'])->group(function () {
     Route::get('/riwayat', [UserController::class, 'riwayat'])->name('user.riwayat');
     Route::get('/mySnack', [UserController::class, 'mySnack'])->name('user.mySnack');
     Route::get('/myStatistik', [UserController::class, 'statistik'])->name('user.statistik');
+
 });
 
 // ADMIN
@@ -72,7 +78,7 @@ Route::middleware(['auth', 'admin'])->group(function () {
     Route::get('/snack', [AdminController::class, 'snack'])->name('admin.snack');
     // Master Data Snack
     Route::get('/snack', [AdminController::class, 'snack'])->name('admin.snack');
-    Route::get('/snack/tambah', [AdminController::class, 'tambahSnack'])->name('admin.snack_tambah');
+    Route::get('/snack-tambah', [AdminController::class, 'tambahSnack'])->name('admin.snack_tambah');
     Route::post('/snack/simpan', [AdminController::class, 'simpanSnack'])->name('admin.snack.simpan');
     Route::get('/snack/{id}/edit', [AdminController::class, 'editSnack'])->name('admin.snack.edit');
     Route::put('/snack/{id}/update', [AdminController::class, 'updateSnack'])->name('admin.snack.update');

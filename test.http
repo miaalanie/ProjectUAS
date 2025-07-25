@@ -1,11 +1,13 @@
 ### Coba kirim data suhu & detak ke proses-mood
-POST http://localhost:8000/proses-mood
+POST http://10.157.33.251:8080/proses-mood
 Content-Type: application/json
 
 {
-  "suhu": 36.8,
+  "suhu": 30,
   "detak": 89
 }
+
+
 
 ### Coba kirim data suhu & detak ke proses-mood
 POST http://10.152.192.251:8000/sensor-readings
@@ -15,10 +17,22 @@ Content-Type: application/json
   "suhu": 36.8,
   "detak": 89
 }
+### Coba kirim data suhu & detak ke proses-mood
+POST http://10.157.33.251:8080/api/sensor-readings
+Content-Type: application/json
+
+{
+  "suhu": 24.89,
+  "detak_jantung": 30
+}
 
 
 ### 
 GET http://localhost:8000/get-snack/Calm
+
+
+### 
+GET http://localhost:8000/summary/47
 
 
 

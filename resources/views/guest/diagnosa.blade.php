@@ -1,43 +1,147 @@
 @extends('layouts.app')
 
 @section('content')
+
+<!-- AOS & Animate.css -->
+<link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+<script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+<script>AOS.init();</script>
+
+<!-- Floating Emoji Animation -->
 <style>
+  .floating-emoji {
+    position: absolute;
+    opacity: 0.7;
+    animation: float 6s ease-in-out infinite;
+    z-index: 0;
+  }
+  @keyframes float {
+    0%, 100% { transform: translateY(0px); }
+    50% { transform: translateY(-20px); }
+  }
   .slide { display: none; }
   .slide.active { display: block; animation: fadeIn 0.5s ease-in-out; }
   @keyframes fadeIn { from {opacity: 0;} to {opacity: 1;} }
+  .diagnosa-title {
+    font-size: 2rem;
+    font-weight: 700;
+    color: #7b6ef6;
+    margin-bottom: 1rem;
+  }
+  .diagnosa-emoji {
+    font-size: 2.5rem;
+    margin-bottom: 0.5rem;
+  }
+  .diagnosa-btn {
+    background: linear-gradient(to right, #667eea, #764ba2);
+    color: #fff;
+    border: none;
+    border-radius: 50px;
+    padding: 0.8rem 2.2rem;
+    font-size: 1.15rem;
+    font-weight: 600;
+    box-shadow: 0 8px 20px rgba(0,0,0,0.12);
+    transition: all 0.3s ease;
+    margin-top: 1.2rem;
+  }
+  .diagnosa-btn:hover {
+    transform: scale(1.05);
+    box-shadow: 0 12px 24px rgba(102,126,234,0.18);
+  }
+  .snack-card {
+    background: #fff;
+    border-radius: 1.2rem;
+    box-shadow: 0 2px 12px rgba(102,126,234,0.08);
+    padding: 1.2rem 1rem;
+    margin: 1rem auto;
+    max-width: 320px;
+    text-align: center;
+    transition: box-shadow 0.3s;
+    cursor: pointer;
+  }
+  .snack-card:hover {
+    box-shadow: 0 8px 24px rgba(102,126,234,0.18);
+    transform: translateY(-4px);
+  }
+  .snack-img {
+    border-radius: 1rem;
+    margin-bottom: 0.7rem;
+    max-width: 120px;
+    max-height: 120px;
+    object-fit: cover;
+    box-shadow: 0 2px 8px rgba(102,126,234,0.10);
+  }
 </style>
 
-<div class="container py-5 text-center">
-  <!-- Step 1: Nama -->
-  <div class="slide active" id="slide-1">
-    <h3>Masukkan Namamu</h3>
-    <input type="text" id="nama" class="form-control" placeholder="Nama kamu..." />
-    <button class="btn btn-primary mt-3" onclick="nextSlide(2)">Lanjut</button>
-  </div>
+<div class="position-relative min-vh-100 d-flex align-items-center justify-content-center overflow-hidden" style="background: linear-gradient(135deg, #eef2ff, #f3f8ff);">
+  <!-- Floating Emojis -->
+  <div class="floating-emoji" style="top: 10%; left: 5%; font-size: 2rem;">🍫</div>
+  <div class="floating-emoji" style="top: 20%; right: 10%; font-size: 2.2rem;">🍟</div>
+  <div class="floating-emoji" style="bottom: 15%; left: 10%; font-size: 2rem;">❤️</div>
+  <div class="floating-emoji" style="bottom: 10%; right: 15%; font-size: 2.4rem;">🧠</div>
+  <div class="floating-emoji" style="top: 50%; left: 45%; font-size: 1.8rem;">😋</div>
 
-  <!-- Step 2: Data Sensor -->
-  <div class="slide" id="slide-2">
-    <h3>Data Sensor</h3>
-    <p>Suhu: <span id="suhu"></span> °C</p>
-    <p>Detak Jantung: <span id="detak_jantung"></span> bpm</p>
-    <button class="btn btn-primary mt-3" onclick="processMood()">Proses Mood</button>
-  </div>
+  <!-- Card Content -->
+  <div class="card border-0 shadow-lg px-5 py-5 text-center" style="max-width: 960px; width: 100%; background-color: rgba(255, 255, 255, 0.92);" data-aos="zoom-in" data-aos-duration="1000">
+    <!-- Diagnosis Steps -->
+    <div class="container py-5 text-center">
+      <!-- Step 1: Nama -->
+      <div class="slide active" id="slide-1">
+        <div class="diagnosa-emoji">😋</div>
+        <div class="diagnosa-title">Masukkan Namamu</div>
+        <input type="text" id="nama" class="form-control" placeholder="Nama kamu..." style="max-width:320px; margin:0 auto 1.2rem auto;" />
+        <button class="diagnosa-btn" onclick="nextSlide(2)">Lanjut</button>
+      </div>
 
-  <!-- Step 3: Mood -->
-  <div class="slide" id="slide-3">
-    <h3>Mood Kamu Hari Ini</h3>
-    <p id="hasilMood">...</p>
-    <button class="btn btn-primary mt-3" onclick="getSnackRecommendation()">Lihat Snack</button>
-  </div>
+      <!-- Step 2: Data Sensor -->
+      <div class="slide" id="slide-2">
+        <div class="diagnosa-emoji">🌡️❤️</div>
+        <div class="diagnosa-title">Data Sensor</div>
+        <div style="display: flex; gap: 1.2rem; justify-content: center; margin-bottom: 1.2rem; flex-wrap: wrap;">
+          <div style="background:#7b6ef6; border-radius:1.2rem; color:#fff; flex:1 1 140px; max-width:180px; min-width:120px; padding:1.2rem 0.7rem; text-align:center;">
+            <div style="font-size:2.2rem; margin-bottom:0.3rem;">❤️</div>
+            <div style="font-size:1.1rem;">Detak Jantung</div>
+            <div style="font-size:2.5rem; font-weight:700;" id="detak_jantung">0</div>
+            <div style="font-size:1rem; margin-bottom:0;">bpm</div>
+          </div>
+          <div style="background:#f44336; border-radius:1.2rem; color:#fff; flex:1 1 140px; max-width:180px; min-width:120px; padding:1.2rem 0.7rem; text-align:center;">
+            <div style="font-size:2.2rem; margin-bottom:0.3rem;">🌡️</div>
+            <div style="font-size:1.1rem;">Suhu Tubuh</div>
+            <div style="font-size:2.5rem; font-weight:700;" id="suhu">0</div>
+            <div style="font-size:1rem; margin-bottom:0;">°C</div>
+          </div>
+        </div>
+        <button class="diagnosa-btn" onclick="processMood()">Proses Mood</button>
+      </div>
 
-  <!-- Step 4: Snack -->
-  <div class="slide" id="slide-4">
-    <h3>Snack Rekomendasi 🍿</h3>
-    <div id="snackList"></div>
+      <!-- Step 3: Mood -->
+      <div class="slide" id="slide-3">
+        <div class="diagnosa-emoji">🧠</div>
+        <div class="diagnosa-title">Mood Kamu Hari Ini</div>
+        <div style="font-size:1.2rem; margin-bottom:1.2rem;" id="hasilMood">...</div>
+        <div id="fuzzyDetail" style="margin-bottom:1.2rem;"></div>
+        <button class="diagnosa-btn" onclick="getSnackRecommendation()">Lihat Snack</button>
+      </div>
+
+      <!-- Step 4: Snack -->
+      <div class="slide" id="slide-4">
+        <div class="diagnosa-emoji">🍿</div>
+        <div class="diagnosa-title">Snack Rekomendasi</div>
+        <div id="snackList" style="display:flex; flex-wrap:wrap; justify-content:center;"></div>
+      </div>
+    </div>
   </div>
 </div>
 
+<!-- Bootstrap JS (for modal functionality) -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
 <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+
+<script>
+    const STORAGE_URL = "{{ asset('storage') }}";
+</script>
+
 
 <script>
   let userId = null;
@@ -141,8 +245,52 @@ function processMood() {
         console.log(localStorage.getItem("mood"))
 
 
+        // Emoji mapping for mood
+        const moodEmojis = {
+          relaxed: '😌',
+          calm: '😊',
+          anxious: '😬',
+          tense: '😣'
+        };
+        const moodEmoji = moodEmojis[hasilMood] || '🧠';
+
         document.getElementById("hasilMood").innerHTML =
-          `Mood kamu: <strong>${hasilMood}</strong><br>Nilai: <strong>${nilaiAngka}</strong>`;
+          `<div style='display:flex; align-items:center; justify-content:center; gap:1.2rem; margin-bottom:1.2rem;'>
+            <div style="background:#7b6ef6; color:#fff; border-radius:1.2rem; padding:1.2rem 2rem; min-width:160px; text-align:center; box-shadow:0 2px 8px rgba(102,126,234,0.10);">
+              <div style="font-size:2.5rem;">${moodEmoji}</div>
+              <div style="font-size:1.3rem; font-weight:700;">${hasilMood}</div>
+              <div style="font-size:1rem; margin-top:0.5rem;">Mood Kamu</div>
+            </div>
+            <div style="background:#f44336; color:#fff; border-radius:50%; width:90px; height:90px; display:flex; flex-direction:column; align-items:center; justify-content:center; font-size:1.5rem; font-weight:700; box-shadow:0 2px 8px rgba(244,67,54,0.10);">
+              ${nilaiAngka}
+              <div style="font-size:0.9rem; font-weight:400;">Nilai</div>
+            </div>
+          </div>`;
+
+        // Tampilkan detail fuzzy
+        let fuzzyHtml = `<div style='background:#f8f8ff; border-radius:1rem; padding:1rem; box-shadow:0 2px 8px rgba(102,126,234,0.08); max-width:600px; margin:1rem auto;'>
+          <div style='font-weight:600; color:#764ba2; margin-bottom:0.7rem;'>Detail Perhitungan Fuzzy Tsukamoto</div>
+          <table style='width:100%; font-size:0.98rem; border-collapse:collapse;'>
+            <thead>
+              <tr style='background:#eef2ff;'>
+                <th style='padding:6px; border-radius:0.5rem 0 0 0.5rem;'>Rule</th>
+                <th style='padding:6px;'>α</th>
+                <th style='padding:6px;'>z</th>
+                <th style='padding:6px; border-radius:0 0.5rem 0.5rem 0;'>Mood</th>
+              </tr>
+            </thead>
+            <tbody>
+        `;
+        data.nilai.detail.forEach(d => {
+          fuzzyHtml += `<tr style='background:#fff;'>
+            <td style='padding:6px; text-align:center;'>${d.rule}</td>
+            <td style='padding:6px; text-align:center;'>${d.α.toFixed(3)}</td>
+            <td style='padding:6px; text-align:center;'>${d.z.toFixed(2)}</td>
+            <td style='padding:6px; text-align:center;'>${d.mood}</td>
+          </tr>`;
+        });
+        fuzzyHtml += `</tbody></table></div>`;
+        document.getElementById("fuzzyDetail").innerHTML = fuzzyHtml;
 
         console.log("STEP 5: Tampilkan hasil & lanjut ke slide 3");
         nextSlide(3);
@@ -179,15 +327,25 @@ function getSnackRecommendation() {
       const div = document.getElementById("snackList");
       div.innerHTML = '';
       if (Array.isArray(data) && data.length > 0) {
+        let gridHtml = `<div class='row w-100 justify-content-center'>`;
         data.forEach(snack => {
-          div.innerHTML += `
-            <div class="card m-2 p-3" style="cursor: pointer;" onclick="handleSnackClick(${snack.id})">
-              <h5>${snack.nama_snack}</h5>
-              ${snack.foto_snack ? `<img src="/images/${snack.foto_snack}" width="100" />` : ''}
-              <p>${snack.kandungan_gizi}</p>
+          gridHtml += `
+            <div class="col-12 col-sm-6 col-md-4 d-flex align-items-stretch">
+              <div class="snack-card w-100 mb-3" onclick="handleSnackClick(${snack.id})">
+                <div class="snack-photo" style="margin-bottom:0.7rem; display:flex; justify-content:center; align-items:center;">
+                 ${snack.foto_snack 
+                  ? `<img src="${STORAGE_URL}/${snack.foto_snack}" alt="${snack.nama_snack}"
+style="border-radius:1rem; max-width:280px; max-height:280px; width:100%; height:auto; object-fit:contain;" />`
+                  : '<span style="font-size:4rem;">🍪</span>'}
+                </div>
+                <div class="snack-title" style="font-weight:700; color:#7b6ef6; font-size:1.08rem; margin-bottom:0.3rem; margin-top:0.5rem;">${snack.nama_snack}</div>
+                <div class="snack-desc" style="font-size:0.95rem; color:#444;">${snack.kandungan_gizi || '-'}</div>
+              </div>
             </div>
           `;
         });
+        gridHtml += `</div>`;
+        div.innerHTML = gridHtml;
       } else {
         div.innerHTML = '<p>Tidak ada rekomendasi snack ditemukan.</p>';
       }
@@ -229,7 +387,7 @@ function handleSnackClick(id_snack) {
     console.log("mood:", mood);
     console.log("snack_id:", snack_id);
 
-    axios.get(`http://10.23.146.87/led?id=${snack_id}`) // Ganti IP sesuai IP dari Serial Monitor
+    axios.get(`http://10.157.33.87/led?id=${snack_id}`) // Ganti IP sesuai IP dari Serial Monitor
     .then(res => {
       console.log("LED berhasil dinyalakan:", res.data);
     })
@@ -249,7 +407,8 @@ function handleSnackClick(id_snack) {
       snack_id: parseInt(snack_id)
     }).then(res => {
       console.log("Berhasil dikirim:", res.data);
-      alert("Diagnosis berhasil disimpan!");
+      // alert("Diagnosis berhasil disimpan!");
+        window.location.href = `/summary/${user_id}`;
       // Bisa redirect atau bersihkan localStorage kalau mau
     }).catch(err => {
       console.error("Gagal kirim diagnosis:", err.response?.data || err.message);

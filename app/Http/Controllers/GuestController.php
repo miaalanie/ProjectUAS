@@ -12,6 +12,24 @@ class GuestController extends Controller
         return view('guest.dashboard');
     }
 
+    // API: Diagnosis per day (for chart)
+    public function apiDiagnosisPerDay() {
+        $data = \App\Models\Diagnosis::selectRaw('DATE(created_at) as date, COUNT(*) as total')
+            ->groupByRaw('DATE(created_at)')
+            ->orderBy('date', 'asc')
+            ->get();
+        return response()->json($data);
+    }
+
+    // API: Mood distribution (for chart)
+    public function apiMoodDistribution() {
+        $data = \App\Models\Diagnosis::selectRaw('mood, COUNT(*) as total')
+            ->groupBy('mood')
+            ->orderBy('total', 'desc')
+            ->get();
+        return response()->json($data);
+    }
+
     public function mulaiDiagnosa() {
         return view('guest.mulaiDiagnosa');
     }
@@ -28,6 +46,7 @@ class GuestController extends Controller
         $fuzzySuhu = \App\Models\BodyTemperatureFuzzy::all();
         return view('guest.suhu', compact('fuzzySuhu'));
     }
+
     public function heartRate() {
         // Ambil semua data fuzzy heart rate dari database
         $fuzzyHeartRate = \App\Models\HeartRateFuzzy::all();
@@ -77,6 +96,10 @@ public function storeDiagnose(Request $request)
 
     return response()->json(['success' => true, 'diagnosis' => $diagnosis]);
 }
+
+ public function summary() {
+        return view('guest.summary');
+    }
 
 
 }

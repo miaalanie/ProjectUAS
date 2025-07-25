@@ -24,6 +24,6 @@ class UserController extends Controller
     public function statistik() {
         return view('user.statistik');
     }
-
+   
 
 }

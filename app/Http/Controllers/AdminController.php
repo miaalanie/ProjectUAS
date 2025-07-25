@@ -9,6 +9,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Str;
 
 class AdminController extends Controller
 {
@@ -221,31 +222,32 @@ class AdminController extends Controller
         return view('admin.editSnack', compact('snack'));
     }
 
-    public function updateSnack(Request $request, $id)
-    {
-        $snack = Snack::findOrFail($id);
+ public function updateSnack(Request $request, $id)
+{
+    $snack = Snack::findOrFail($id);
 
-        $request->validate([
-            'nama_snack' => 'required|string|max:255',
-            'kandungan_gizi' => 'required|string',
-            'foto_snack' => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
-        ]);
+    $validated = $request->validate([
+        'nama_snack'     => 'required|string|max:255',
+        'kandungan_gizi' => 'required|string',
+        'foto_snack'     => 'nullable|image|mimes:jpg,jpeg,png',
+    ]);
 
-        if ($request->hasFile('foto_snack')) {
-            if ($snack->foto_snack && Storage::disk('public')->exists($snack->foto_snack)) {
-                Storage::disk('public')->delete($snack->foto_snack);
-            }
-            $fotoPath = $request->file('foto_snack')->store('snack_photos', 'public');
-            $snack->foto_snack = $fotoPath;
+    if ($request->hasFile('foto_snack')) {
+        // hapus foto lama
+        if ($snack->foto_snack && Storage::disk('public')->exists($snack->foto_snack)) {
+            Storage::disk('public')->delete($snack->foto_snack);
         }
 
-        $snack->update([
-            'nama_snack' => $request->nama_snack,
-            'kandungan_gizi' => $request->kandungan_gizi,
-        ]);
-
-        return redirect()->route('admin.snack')->with('success', 'Snack berhasil diperbarui!');
+        $file = $request->file('foto_snack');
+        $filename = Str::uuid() . '.' . $file->getClientOriginalExtension();
+        $path = $file->storeAs('snack_photos', $filename, 'public'); // ke storage/app/public/snack_photos
+        $validated['foto_snack'] = $path; // path relatif di DB
     }
+
+    $snack->update($validated);
+
+    return redirect()->route('admin.snack')->with('success', 'Snack berhasil diperbarui!');
+}
 
     public function hapusSnack($id)
     {

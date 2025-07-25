@@ -1,0 +1,510 @@
+@extends('layouts.app')
+
+@section('content')
+
+
+<!-- Overwrite All UI Styles: Fullscreen, Modern, Clean, Responsive -->
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+<style>
+  html, body {
+    height: 100%;
+    margin: 0;
+    padding: 0;
+    font-family: 'Inter', Arial, sans-serif;
+    background: #eef2ff;
+    min-width: 100vw;
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+  .diagnosa-bg {
+    min-height: 100vh;
+    min-width: 100vw;
+    width: 100vw;
+    height: 100vh;
+    background: linear-gradient(135deg, #eef2ff 0%, #f3f8ff 100%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    overflow: hidden;
+  }
+  .floating-emoji {
+    position: absolute;
+    opacity: 0.7;
+    animation: float 6s ease-in-out infinite;
+    z-index: 0;
+    pointer-events: none;
+    font-size: clamp(1.5rem, 2.5vw, 2.8rem);
+    user-select: none;
+    overflow: hidden;
+  }
+  @keyframes float {
+    0%, 100% { transform: translateY(0px); }
+    50% { transform: translateY(-18px); }
+  }
+  .diagnosa-card {
+    background: rgba(255,255,255,0.97);
+    border-radius: 2rem;
+    box-shadow: 0 8px 32px 0 rgba(102,126,234,0.10), 0 1.5px 8px 0 rgba(118,75,162,0.08);
+    padding: 2.5rem 2.2rem 2.2rem 2.2rem;
+    max-width: 500px;
+    width: 100%;
+    min-height: 480px;
+    margin: 0 auto;
+    position: relative;
+    z-index: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    box-sizing: border-box;
+  }
+  .diagnosa-title {
+    font-size: 2.2rem;
+    font-weight: 800;
+    color: #667eea;
+    margin-bottom: 1.3rem;
+    text-align: center;
+    word-break: break-word;
+    letter-spacing: -0.5px;
+  }
+  .diagnosa-emoji {
+    font-size: 2.5rem;
+    margin-bottom: 0.7rem;
+    text-align: center;
+  }
+  .diagnosa-btn {
+    background: linear-gradient(to right, #667eea, #764ba2);
+    border-radius: 50px;
+    color: #fff;
+    font-weight: 600;
+    box-shadow: 0 8px 20px rgba(0,0,0,0.12);
+    transition: all 0.3s cubic-bezier(.4,2,.6,1);
+    padding: 0.85rem 2.7rem;
+    font-size: 1.15rem;
+    border: none;
+    min-width: 140px;
+    margin-top: 0.5rem;
+    margin-bottom: 0.5rem;
+    outline: none;
+  }
+  .diagnosa-btn:hover, .diagnosa-btn:focus {
+    transform: scale(1.06);
+    color: #fff;
+    box-shadow: 0 12px 32px rgba(102,126,234,0.13);
+  }
+  .slide { display: none; width: 100%; }
+  .slide.active { display: block; animation: fadeIn 0.5s ease-in-out; width: 100%; }
+  @keyframes fadeIn { from {opacity: 0;} to {opacity: 1;} }
+  .form-control {
+    border-radius: 1.2rem;
+    border: 1.5px solid #d1d5db;
+    padding: 0.85rem 1.2rem;
+    font-size: 1.1rem;
+    width: 100%;
+    margin-bottom: 0.7rem;
+    outline: none;
+    box-shadow: none;
+    transition: border 0.2s;
+  }
+  .form-control:focus {
+    border: 1.5px solid #667eea;
+    box-shadow: 0 0 0 2px #667eea22;
+  }
+  /* Responsive */
+  @media (max-width: 600px) {
+    .diagnosa-card {
+      padding: 1.2rem 0.5rem 1.2rem 0.5rem;
+      min-height: 420px;
+      max-width: 99vw;
+    }
+    .diagnosa-title { font-size: 1.3rem; }
+    .diagnosa-emoji { font-size: 1.5rem; }
+  }
+  /* Hide scrollbars for horizontal overflow */
+  ::-webkit-scrollbar { width: 0 !important; background: transparent; }
+</style>
+
+
+
+<div class="diagnosa-bg">
+  <!-- Floating Emojis (modern, no overlap, always inside) -->
+  <div class="floating-emoji" style="top: 7%; left: 5%;">🍫</div>
+  <div class="floating-emoji" style="top: 18%; right: 7%;">🍟</div>
+  <div class="floating-emoji" style="bottom: 15%; left: 8%;">❤️</div>
+  <div class="floating-emoji" style="bottom: 10%; right: 12%;">🧠</div>
+  <div class="floating-emoji" style="top: 50%; left: 48%;">😋</div>
+
+
+    <div class="diagnosa-card">
+      <!-- Step 1: Nama -->
+      <div class="slide active" id="slide-1">
+        <div class="diagnosa-emoji">🦋🧠🫀🎀</div>
+        <div class="diagnosa-title">Masukkan Namamu</div>
+        <input type="text" id="nama" class="form-control" placeholder="Nama kamu..." />
+        <button class="diagnosa-btn" onclick="nextSlide(2)">Lanjut</button>
+      </div>
+
+      <!-- Step 2: Data Sensor -->
+      <div class="slide" id="slide-2">
+        <div class="diagnosa-emoji">🌡️❤️</div>
+        <div class="diagnosa-title">Data Sensor</div>
+        <div style="display: flex; gap: 1.2rem; justify-content: center; margin-bottom: 1.2rem; flex-wrap: wrap;">
+          <div style="background:#7b6ef6; border-radius:1.2rem; color:#fff; flex:1 1 140px; max-width:180px; min-width:120px; padding:1.2rem 0.7rem; text-align:center;">
+            <div style="font-size:2.2rem; margin-bottom:0.3rem;">❤️</div>
+            <div style="font-size:1.1rem;">Detak Jantung</div>
+            <div style="font-size:2.5rem; font-weight:700;" id="detak_jantung">0</div>
+            <div style="font-size:1rem; margin-bottom:0;">bpm</div>
+          </div>
+          <div style="background:#f44336; border-radius:1.2rem; color:#fff; flex:1 1 140px; max-width:180px; min-width:120px; padding:1.2rem 0.7rem; text-align:center;">
+            <div style="font-size:2.2rem; margin-bottom:0.3rem;">🌡️</div>
+            <div style="font-size:1.1rem;">Suhu Tubuh</div>
+            <div style="font-size:2.5rem; font-weight:700;" id="suhu">0</div>
+            <div style="font-size:1rem; margin-bottom:0;">°C</div>
+          </div>
+        </div>
+        <button class="diagnosa-btn" onclick="processMood()">Proses Mood</button>
+      </div>
+
+      <!-- Step 3: Mood -->
+      <div class="slide" id="slide-3">
+        <div class="diagnosa-title" style="margin-bottom:1.1rem;">Mood Kamu Hari Ini</div>
+        <div style="display:flex; flex-wrap:wrap; gap:1.2rem; justify-content:center; align-items:stretch;">
+          <div style="background:#7b6ef6; border-radius:1.5rem; color:#fff; flex:1 1 180px; max-width:220px; min-width:120px; padding:2rem 1.2rem 1.2rem 1.2rem; display:flex; flex-direction:column; align-items:center; justify-content:center;">
+            <div id="moodEmoji" class="mood-emoji" style="font-size:3.2rem; margin-bottom:0.5rem;">🧠</div>
+            <div id="moodText" class="mood-text" style="font-size:1.3rem; font-weight:700; margin-bottom:0.2rem;">-</div>
+            <div id="moodValue" class="mood-value" style="font-size:2.2rem; font-weight:800; margin-bottom:0.7rem;">0</div>
+            <div style="width:100%; max-width:160px; height:12px; background:#fff3; border-radius:8px; margin-bottom:0.7rem;">
+              <div id="moodBar" class="progress-bar" style="height:100%; background:#fff; opacity:0.7; border-radius:8px; width:0%; transition:width 0.4s cubic-bezier(.4,2,.6,1);"></div>
+            </div>
+          </div>
+          <div style="flex:2 1 260px; min-width:180px; max-width:340px; display:flex; flex-direction:column; justify-content:flex-start;">
+            <div style="background:linear-gradient(120deg, #f8f9fa 80%, #e3e7fa 100%); border-radius:1.2rem; min-height:180px; padding:1.2rem 1.2rem 1rem 1.2rem; width:100%; box-sizing:border-box;">
+              <div class="fuzzy-title" style="font-size:1.1rem; font-weight:700; color:#5a5a7a; margin-bottom:0.7rem;">Proses Perhitungan Fuzzy</div>
+              <div id="fuzzyFuzzifikasi" class="mb-3"></div>
+              <div id="fuzzyInferensi" class="mt-2"></div>
+              <div id="fuzzyDefuzzifikasi" class="mt-2"></div>
+            </div>
+          </div>
+        </div>
+        <div style="display:flex; justify-content:center; margin-top:1.2rem;">
+          <button class="diagnosa-btn" onclick="getSnackRecommendation()">Lihat Snack</button>
+        </div>
+      </div>
+
+      <!-- Step 4: Snack -->
+      <div class="slide" id="slide-4">
+        <div class="diagnosa-emoji">🍿</div>
+        <div class="diagnosa-title">Snack Rekomendasi</div>
+        <div id="snackList" style="display:flex; flex-wrap:wrap; gap:1.2rem; justify-content:center; align-items:stretch; width:100%; margin-top:1.2rem;"></div>
+      </div>
+    </div>
+
+<!-- Card for snack (used in JS) -->
+<style>
+  .snack-card {
+    background: linear-gradient(120deg, #fff 80%, #f3f8ff 100%);
+    border-radius: 1.2rem;
+    box-shadow: 0 4px 24px #7b6ef633;
+    padding: 1.2rem 1rem 1rem 1rem;
+    min-width: 160px;
+    max-width: 220px;
+    width: 100%;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    transition: box-shadow 0.2s, transform 0.2s;
+    cursor: pointer;
+    box-sizing: border-box;
+  }
+  .snack-card:hover {
+    box-shadow: 0 8px 32px #7b6ef655;
+    transform: translateY(-4px) scale(1.03);
+  }
+  .snack-photo {
+    width: 80px;
+    height: 80px;
+    object-fit: cover;
+    border-radius: 1rem;
+    box-shadow: 0 2px 12px #7b6ef622;
+    margin-bottom: 0.7rem;
+    background: #f3f3fa;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+  }
+  .snack-title {
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: #7b6ef6;
+    margin-bottom: 0.3rem;
+    text-align: center;
+    word-break: break-word;
+  }
+  .snack-desc {
+    font-size: 0.98rem;
+    color: #444;
+    text-align: center;
+    margin-bottom: 0.1rem;
+    word-break: break-word;
+  }
+</style>
+  </div>
+</div>
+<!-- Bootstrap JS (for modal functionality) -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+
+<script>
+  let userId = null;
+  let suhu = null;
+  let detak = null;
+  let hasilMood = null;
+
+  function nextSlide(n) {
+    document.querySelectorAll('.slide').forEach(s => s.classList.remove('active'));
+    document.getElementById(`slide-${n}`).classList.add('active');
+
+if (n === 2) {
+  const nama = document.getElementById("nama").value;
+
+  if (!nama.trim()) {
+    alert("Nama tidak boleh kosong!");
+    return;
+  }
+
+  console.log("Nama yang dikirim:", nama);
+
+  // Step 1: simpan nama guest
+  axios.post('/guests', { nama: nama })
+    .then(res => {
+      const userId = res.data.id;
+      localStorage.setItem("userId", userId);
+      console.log("Guest berhasil disimpan. ID:", userId);
+
+      // Step 2: setelah berhasil simpan nama, ambil data sensor
+      return axios.get('/api/sensor-readings');
+    })
+    .then(res => {
+      const latest = res.data.data[0];
+      console.log("Data sensor berhasil diambil:", latest);
+
+      // simpan ke localStorage
+      localStorage.setItem("suhu", latest.suhu);
+      localStorage.setItem("detak_jantung", latest.detak_jantung);
+
+      // tampilkan di halaman slide-2
+      document.getElementById("suhu").innerText = latest.suhu;
+      document.getElementById("detak_jantung").innerText = latest.detak_jantung;
+    })
+    .catch(err => {
+      console.error("Error saat menyimpan nama atau mengambil data sensor:", err);
+      alert("Terjadi kesalahan saat proses data. Coba lagi.");
+    });
+}
+
+
+if (n === 3) {
+  // Tidak usah ambil data sensor lagi, cukup tampilkan hasil yang sudah diproses
+  console.log("Step 3: Hasil mood sudah ditampilkan.");
+}
+
+
+  }
+
+function processMood() {
+  const suhu = localStorage.getItem("suhu");
+  const detak = localStorage.getItem("detak_jantung");
+
+  console.log("STEP 1: Ambil data dari localStorage");
+  console.log("  → suhu:", suhu);
+  console.log("  → detak:", detak);
+
+  if (!suhu || !detak) {
+    alert("Data suhu atau detak jantung kosong!");
+    return;
+  }
+
+  console.log("STEP 2: Kirim POST request ke /proses-mood");
+
+  axios.post("/proses-mood", {
+    suhu: suhu,
+    detak: detak
+  })
+    .then(res => {
+      console.log("STEP 3: Terima response dari backend");
+      console.log("  → res.data:", res.data);
+
+      const data = res.data;
+
+      if (
+        data &&
+        data.nilai &&
+        Array.isArray(data.nilai.detail) &&
+        data.nilai.detail.length > 0
+      ) {
+        const hasilMood = data.nilai.detail[0].mood;
+        const nilaiAngka = data.nilai.nilai.toFixed(2);
+
+        // Simpan ke localStorage
+        localStorage.setItem("mood", hasilMood);
+        localStorage.setItem("nilaiMood", nilaiAngka);
+
+        // Visual mood
+        let emoji = "😐", cardColor = "#7b6ef6";
+        if (hasilMood === "relaxed") { emoji = "😊"; cardColor = "#43b581"; }
+        else if (hasilMood === "calm") { emoji = "🙂"; cardColor = "#4fc3f7"; }
+        else if (hasilMood === "anxious") { emoji = "😟"; cardColor = "#ff9800"; }
+        else if (hasilMood === "tense") { emoji = "😣"; cardColor = "#f44336"; }
+
+        document.getElementById("moodEmoji").innerText = emoji;
+        document.getElementById("moodText").innerText = hasilMood.charAt(0).toUpperCase() + hasilMood.slice(1);
+        document.getElementById("moodValue").innerText = nilaiAngka;
+        document.getElementById("moodCard").style.background = cardColor;
+        // Bar posisi nilai
+        document.getElementById("moodBar").style.width = Math.max(0, Math.min(100, nilaiAngka)) + "%";
+
+        // Tampilkan proses fuzzy dari detail jika ada (meski hanya 1 rule)
+        const fuzzyBox = document.getElementById("fuzzyDetailBox");
+        fuzzyBox.style.display = '';
+        // Fuzzifikasi tidak tersedia dari API, jadi tampilkan info saja
+        document.getElementById("fuzzyFuzzifikasi").innerHTML = '<span style="font-weight:500;color:#7b6ef6;">Fuzzifikasi:</span><br><span class="text-muted" style="font-size:0.98rem;">(Belum tersedia dari API)</span>';
+
+        // Inferensi
+        let inf = data.nilai.detail;
+        let htmlInf = `<span style="font-weight:500;color:#7b6ef6;">Inferensi (Rule aktif):</span><br>`;
+        htmlInf += `<div class="table-responsive"><table class='table table-sm table-bordered mb-0' style='background:#fff;border-radius:0.7rem;overflow:hidden;'><thead style="background:#f3f3fa;"><tr style="color:#7b6ef6;"><th>Rule</th><th>α</th><th>z</th><th>Mood</th></tr></thead><tbody>`;
+        inf.forEach(r => { htmlInf += `<tr><td>${r.rule}</td><td>${(r["α"]||r.alpha||0).toFixed(3)}</td><td>${r.z.toFixed(2)}</td><td style="text-transform:capitalize;">${r.mood}</td></tr>`; });
+        htmlInf += `</tbody></table></div>`;
+        document.getElementById("fuzzyInferensi").innerHTML = htmlInf;
+
+        // Defuzzifikasi
+        let atas = 0, bawah = 0;
+        inf.forEach(r => { atas += (r["α"]||r.alpha||0)*r.z; bawah += (r["α"]||r.alpha||0); });
+        let htmlDef = `<span style="font-weight:500;color:#7b6ef6;">Defuzzifikasi:</span><br>`;
+        htmlDef += `<span style="font-size:1.05rem;">∑(α × z) / ∑α = <b>${atas.toFixed(2)}</b> / <b>${bawah.toFixed(3)}</b> = <span style="color:#43b581;font-weight:600;">${nilaiAngka}</span></span>`;
+        document.getElementById("fuzzyDefuzzifikasi").innerHTML = htmlDef;
+
+        nextSlide(3);
+      } else {
+        console.warn("⚠️ Data response tidak sesuai format atau kosong:", data);
+        alert("Mood tidak bisa diproses. Coba lagi.");
+      }
+    })
+    .catch(err => {
+      console.error("❌ Gagal proses mood:", err);
+      alert("Gagal proses mood");
+    });
+}
+
+function getSnackRecommendation() {
+  const mood = localStorage.getItem("mood");
+
+  console.log("mood", mood);
+
+  if (!mood) {
+    alert("Data Mood kosong!");
+    return;
+  }
+
+  console.log("step 3: kirim POST ke /get-snack");
+
+  axios.get(`/get-snack/${encodeURIComponent(mood)}`)
+    .then(res => {
+      console.log("respon dari backend", res.data);
+
+      const data = res.data.snack; // ambil array snack
+
+      // Tampilkan snack ke view di slide 4
+      const div = document.getElementById("snackList");
+      div.innerHTML = '';
+      if (Array.isArray(data) && data.length > 0) {
+        data.forEach(snack => {
+          div.innerHTML += `
+            <div class="col-12 col-sm-6 col-md-4 d-flex align-items-stretch">
+              <div class="snack-card w-100 mb-3" onclick="handleSnackClick(${snack.id})">
+                <div class="snack-photo">
+                  ${snack.foto_snack ? `<img src="/images/${snack.foto_snack}" alt="${snack.nama_snack}" class="snack-photo" loading="lazy" />` : '<span style="font-size:2.5rem;">🍪</span>'}
+                </div>
+                <div class="snack-title">${snack.nama_snack}</div>
+                <div class="snack-desc">${snack.kandungan_gizi || '-'}</div>
+              </div>
+            </div>
+          `;
+        });
+      } else {
+        div.innerHTML = '<p>Tidak ada rekomendasi snack ditemukan.</p>';
+      }
+
+      // Pindah ke slide 4
+      nextSlide(4);
+    })
+    .catch(error => {
+      console.error("Gagal ambil snack:", error);
+      alert("Gagal mengambil rekomendasi snack.");
+    });
+}
+
+function handleSnackClick(idSnack) {
+  console.log("Snack diklik, ID:", idSnack);
+
+  // Simpan id snack ke localStorage
+  localStorage.setItem("snack_id", idSnack);
+
+  // Ambil semua data dari localStorage
+  const userId = localStorage.getItem("userId");
+  const suhu = localStorage.getItem("suhu");
+  const detakJantung = localStorage.getItem("detak_jantung");
+  const hasilFuzzy = localStorage.getItem("nilaiMood");
+  const mood = localStorage.getItem("mood");
+  const snackId = localStorage.getItem("snack_id");
+
+  // Validasi
+  if (!userId || !suhu || !detakJantung || !hasilFuzzy || !mood || !snackId) {
+    alert("Data diagnosis belum lengkap!");
+    return;
+  }
+
+  console.log("Data yang akan dikirim:");
+  console.log("user_id:", userId);
+  console.log("suhu:", suhu);
+  console.log("detak_jantung:", detakJantung);
+  console.log("hasil_fuzzy:", hasilFuzzy);
+  console.log("mood:", mood);
+  console.log("snack_id:", snackId);
+
+  // Nyalakan LED
+  axios.get(`http://10.23.146.87/led?id=${snackId}`)
+    .then(res => {
+      console.log("LED berhasil dinyalakan:", res.data);
+    })
+    .catch(err => {
+      console.error("Gagal:", err);
+    });
+
+  // Kirim POST ke backend
+  axios.post('/diagnoses', {
+    user_id: parseInt(userId),
+    suhu: parseFloat(suhu),
+    detak_jantung: parseFloat(detakJantung),
+    hasil_fuzzy: parseFloat(hasilFuzzy),
+    mood: mood,
+    snack_id: parseInt(snackId)
+  })
+    .then(res => {
+      console.log("Berhasil dikirim:", res.data);
+      alert("Diagnosis berhasil disimpan!");
+      // Bisa redirect atau bersihkan localStorage kalau mau
+    })
+    .catch(err => {
+      console.error("Gagal kirim diagnosis:", err.response?.data || err.message);
+      alert("Gagal kirim diagnosis");
+    });
+}
+ 
+ </script>
+@endsection
+ 

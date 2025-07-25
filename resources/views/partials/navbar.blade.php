@@ -1,4 +1,11 @@
 <nav class="navbar navbar-expand navbar-light bg-white topbar mb-4 static-top shadow">
+    <style>
+        .navbar.topbar {
+            border-radius: 20px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+            margin: 16px;
+        }
+    </style>
 
 <!-- Sidebar Toggle (Topbar) -->
 <button id="sidebarToggleTop" class="btn btn-link d-md-none rounded-circle mr-3">

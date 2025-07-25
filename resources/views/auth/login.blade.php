@@ -37,7 +37,39 @@
                     <div class="card-body p-0">
                         <!-- Nested Row within Card Body -->
                         <div class="row">
-                            <div class="col-lg-6 d-none d-lg-block bg-login-image"></div>
+                            <div class="col-lg-6 d-none d-lg-flex align-items-center justify-content-center" style="background:linear-gradient(135deg,#e3f0ff 60%,#4e73df 100%);">
+                                <!-- Animated SVG -->
+                                <div style="width:100%;max-width:340px;">
+                                    <svg viewBox="0 0 340 340" fill="none" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;">
+                                        <defs>
+                                            <linearGradient id="grad1" x1="0" y1="0" x2="340" y2="340" gradientUnits="userSpaceOnUse">
+                                                <stop stop-color="#b3d1ff"/>
+                                                <stop offset="0.7" stop-color="#4e73df"/>
+                                                <stop offset="1" stop-color="#29469a"/>
+                                            </linearGradient>
+                                            <linearGradient id="grad2" x1="0" y1="340" x2="340" y2="0" gradientUnits="userSpaceOnUse">
+                                                <stop stop-color="#e3f0ff"/>
+                                                <stop offset="1" stop-color="#b3d1ff"/>
+                                            </linearGradient>
+                                        </defs>
+                                        <circle cx="170" cy="170" r="120" fill="url(#grad1)">
+                                            <animate attributeName="r" values="120;130;120" dur="2.5s" repeatCount="indefinite"/>
+                                        </circle>
+                                        <ellipse cx="170" cy="170" rx="80" ry="110" fill="url(#grad2)" opacity="0.25">
+                                            <animate attributeName="rx" values="80;100;80" dur="2.5s" repeatCount="indefinite"/>
+                                        </ellipse>
+                                        <circle cx="110" cy="110" r="18" fill="#cfe2ff" opacity="0.7">
+                                            <animate attributeName="cy" values="110;130;110" dur="2.2s" repeatCount="indefinite"/>
+                                        </circle>
+                                        <circle cx="230" cy="230" r="14" fill="#cfe2ff" opacity="0.7">
+                                            <animate attributeName="cx" values="230;210;230" dur="2.2s" repeatCount="indefinite"/>
+                                        </circle>
+                                        <text x="50%" y="54%" text-anchor="middle" fill="#29469a" font-size="2.1rem" font-family="Nunito,Arial,sans-serif" font-weight="bold" opacity="0.8">SnackMood</text>
+                                        <text x="50%" y="62%" text-anchor="middle" fill="#4e73df" font-size="1.1rem" font-family="Nunito,Arial,sans-serif" opacity="0.7">Login</text>
+                                        <text x="50%" y="62%" text-anchor="middle" fill="#29469a" font-size="1.1rem" font-family="Nunito,Arial,sans-serif" opacity="0.7">Login</text>
+                                    </svg>
+                                </div>
+                            </div>
                             <div class="col-lg-6">
                                 <div class="p-5">
                                     <div class="text-center">

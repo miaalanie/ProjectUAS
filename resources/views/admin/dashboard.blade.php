@@ -3,14 +3,6 @@
 @section('content')
 <div class="py-12">
     <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-
-        {{-- Card: Login Confirmation --}}
-        <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg mb-4">
-            <div class="p-6 text-gray-900">
-                {{ __("You're logged in!") }}
-            </div>
-        </div>
-
         {{-- Dashboard Charts Container --}}
         <div class="container-fluid">
             <div class="row">

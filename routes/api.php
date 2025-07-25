@@ -4,8 +4,14 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\SensorReadingController;
 
+
 Route::post('/sensor-readings', [SensorReadingController::class, 'store']);
 Route::get('/sensor-readings', [SensorReadingController::class, 'index']);
+
+// Dashboard Guest API
+use App\Http\Controllers\GuestController;
+Route::get('/dashboard/diagnosis-per-day', [GuestController::class, 'apiDiagnosisPerDay']);
+Route::get('/dashboard/mood-distribution', [GuestController::class, 'apiMoodDistribution']);
 
 
 /*
